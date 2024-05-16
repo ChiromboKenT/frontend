@@ -1,0 +1,7 @@
+/* src/components/AudioVisualizer.css */
+.visualizer-canvas {
+  width: 150px;
+  height: auto;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(224, 183, 69, 0.7) 32%, rgba(82, 207, 230, 0) 68%)
+}

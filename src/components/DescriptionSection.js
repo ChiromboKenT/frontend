@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import {
   Button,
   TextField,
@@ -10,10 +10,13 @@ import {
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import MicIcon from "@material-ui/icons/Mic";
+import StopIcon from "@material-ui/icons/Stop";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
 import CloseIcon from "@material-ui/icons/Close";
 import AudioPlayer from "react-h5-audio-player";
+import {ReactMic} from "react-mic";
 import "react-h5-audio-player/lib/styles.css";
+import AudioVisualizer from "./AudioVisualizer";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -50,12 +53,50 @@ const useStyles = makeStyles((theme) => ({
   audioPlayer: {
     marginTop: theme.spacing(2),
   },
+  visualizer: {
+    width: "100%",
+    marginTop: theme.spacing(2),
+    borderRadius: 8,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
 }));
 
 function DescriptionSection({onGenerate}) {
   const classes = useStyles();
   const [description, setDescription] = useState("");
+   const audioContextRef = useRef(null);
+
+
+  const [analyser, setAnalyser] = useState(null);
   const [mediaFiles, setMediaFiles] = useState([]);
+  const [isRecording, setIsRecording] = useState(false);
+
+  useEffect(() => {
+    if (isRecording) {
+      startVisualizer();
+    } else {
+      stopVisualizer();
+    }
+  }, [isRecording]);
+
+   const startVisualizer = () => {
+     audioContextRef.current = new (window.AudioContext ||
+       window.webkitAudioContext)();
+     const analyserNode = audioContextRef.current.createAnalyser();
+     navigator.mediaDevices.getUserMedia({audio: true}).then((stream) => {
+       const source = audioContextRef.current.createMediaStreamSource(stream);
+       source.connect(analyserNode);
+       setAnalyser(analyserNode);
+     });
+   };
+
+   const stopVisualizer = () => {
+     if (audioContextRef.current) {
+       audioContextRef.current.close();
+     }
+   };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -69,8 +110,12 @@ function DescriptionSection({onGenerate}) {
   };
 
   const handleGenerateClick = () => {
-    const audioFile = mediaFiles.find((file) => file.type.startsWith("audio"));
-    const videoFile = mediaFiles.find((file) => file.type.startsWith("video"));
+    const audioFile = mediaFiles.find(
+      (file) => file.type && file.type.startsWith("audio")
+    );
+    const videoFile = mediaFiles.find(
+      (file) => file.type && file.type.startsWith("video")
+    );
     onGenerate(
       description,
       audioFile ? URL.createObjectURL(audioFile) : null,
@@ -78,9 +123,33 @@ function DescriptionSection({onGenerate}) {
     );
   };
 
+  const handleRecordClick = () => {
+    setIsRecording(!isRecording);
+  };
+
+  const handleStopRecording = (recordedBlob) => {
+    const file = new File([recordedBlob.blob], "recording.wav", {
+      type: "audio/wav",
+    });
+    setMediaFiles([...mediaFiles, file]);
+    setIsRecording(false);
+  };
+
   return (
     <div>
       <Typography variant="h5">Capture Narratives</Typography>
+      <div className={classes.visualizer}>
+        {isRecording && <AudioVisualizer analyser={analyser} />}
+      </div>
+      <ReactMic
+        record={isRecording}
+        className="sound-wave"
+        onStop={handleStopRecording}
+        strokeColor="#000000"
+        backgroundColor="#f0f0f0"
+        visualSetting={undefined}
+        noiseSuppression={true}
+      />
       <TextField
         label="Add a description"
         fullWidth
@@ -103,8 +172,8 @@ function DescriptionSection({onGenerate}) {
                   <AttachFileIcon />
                 </IconButton>
               </label>
-              <IconButton>
-                <MicIcon />
+              <IconButton onClick={handleRecordClick}>
+                {isRecording ? <StopIcon /> : <MicIcon />}
               </IconButton>
             </InputAdornment>
           ),
@@ -113,25 +182,32 @@ function DescriptionSection({onGenerate}) {
       <Grid container spacing={1}>
         {mediaFiles.map((file, index) => (
           <Grid item key={index} className={classes.thumbnailContainer}>
-            {file.type.startsWith("image") && (
+            {file.type && file.type.startsWith("image") && (
               <Avatar
                 src={URL.createObjectURL(file)}
                 className={classes.thumbnail}
                 variant="rounded"
               />
             )}
-            {file.type.startsWith("audio") && (
+            {file.type && file.type.startsWith("audio") && (
               <AudioPlayer
                 src={URL.createObjectURL(file)}
                 controls
                 className={classes.audioPlayer}
               />
             )}
-            {file.type.startsWith("video") && (
+            {file.type && file.type.startsWith("video") && (
               <video
                 src={URL.createObjectURL(file)}
                 className={classes.thumbnail}
                 controls
+              />
+            )}
+            {!file.type && (
+              <AudioPlayer
+                src={URL.createObjectURL(file)}
+                controls
+                className={classes.audioPlayer}
               />
             )}
             <IconButton
