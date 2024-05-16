@@ -11,6 +11,8 @@ import {
   Select,
   FormControl,
   InputLabel,
+  Backdrop,
+  CircularProgress,
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import MicIcon from "@material-ui/icons/Mic";
@@ -65,6 +67,10 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     alignItems: "center",
   },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: "#fff",
+  },
 }));
 
 function DescriptionSection({onGenerate, startGenerate}) {
@@ -76,6 +82,7 @@ function DescriptionSection({onGenerate, startGenerate}) {
   const [isRecording, setIsRecording] = useState(false);
   const [srcLang, setSrcLang] = useState("en");
   const [destLang, setDestLang] = useState("en");
+  const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
     if (isRecording) {
@@ -119,6 +126,7 @@ function DescriptionSection({onGenerate, startGenerate}) {
 
   const handleGenerateClick = async () => {
     startGenerate();
+    setIsGenerating(true);
     const audioFile = mediaFiles.find(
       (file) => file.type && file.type.startsWith("audio")
     );
@@ -138,8 +146,8 @@ function DescriptionSection({onGenerate, startGenerate}) {
           body: formData,
         }
       );
-      const { poster_html, social } = await response.json();
-      const html = await poster_html.text();
+      const {poster_html, social} = await response.json();
+      const html = poster_html;
       const {facebook, twitter, instagram} = social;
       onGenerate({
         html,
@@ -147,8 +155,10 @@ function DescriptionSection({onGenerate, startGenerate}) {
         twitter,
         instagram,
       });
+      setIsGenerating(false);
     } catch (error) {
       console.error("Error generating poster:", error);
+      setIsGenerating(false);
     }
   };
 
@@ -292,6 +302,9 @@ function DescriptionSection({onGenerate, startGenerate}) {
       >
         Generate
       </Button>
+      <Backdrop className={classes.backdrop} open={isGenerating}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </div>
   );
 }
