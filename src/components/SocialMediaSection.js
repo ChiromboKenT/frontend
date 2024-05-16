@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function SocialMediaSection({socialMediaText}) {
+function SocialMediaSection({socialMediaText, isGenerating}) {
   const classes = useStyles();
   const [value, setValue] = useState(0);
 

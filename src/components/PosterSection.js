@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function PosterSection({poster, setPoster}) {
+function PosterSection({poster, setPoster, isGenerating}) {
   const classes = useStyles();
 
   const handleRegenerate = () => {
@@ -38,7 +38,13 @@ function PosterSection({poster, setPoster}) {
   return (
     <div>
       <Typography variant="h5">Poster Generator</Typography>
-      {poster && (
+      {!poster ? isGenerating ? (
+        <Typography variant="body1">Generating poster...</Typography>
+      ) : (
+        <Typography variant="body1">
+          Click the button to generate a poster.
+        </Typography>
+      ) : (
         <Card className={classes.card}>
           <CardMedia
             className={classes.media}

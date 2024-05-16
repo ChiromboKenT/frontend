@@ -57,17 +57,16 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     marginTop: theme.spacing(2),
     borderRadius: 8,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
 }));
 
 function DescriptionSection({onGenerate}) {
   const classes = useStyles();
   const [description, setDescription] = useState("");
-   const audioContextRef = useRef(null);
-
+  const audioContextRef = useRef(null);
 
   const [analyser, setAnalyser] = useState(null);
   const [mediaFiles, setMediaFiles] = useState([]);
@@ -81,22 +80,26 @@ function DescriptionSection({onGenerate}) {
     }
   }, [isRecording]);
 
-   const startVisualizer = () => {
-     audioContextRef.current = new (window.AudioContext ||
-       window.webkitAudioContext)();
-     const analyserNode = audioContextRef.current.createAnalyser();
-     navigator.mediaDevices.getUserMedia({audio: true}).then((stream) => {
-       const source = audioContextRef.current.createMediaStreamSource(stream);
-       source.connect(analyserNode);
-       setAnalyser(analyserNode);
-     });
-   };
+  const startVisualizer = () => {
+    audioContextRef.current = new (window.AudioContext ||
+      window.webkitAudioContext)();
+    const analyserNode = audioContextRef.current.createAnalyser();
+    navigator.mediaDevices.getUserMedia({audio: true}).then((stream) => {
+      const source = audioContextRef.current.createMediaStreamSource(stream);
+      source.connect(analyserNode);
+      setAnalyser(analyserNode);
+    });
+  };
 
-   const stopVisualizer = () => {
-     if (audioContextRef.current) {
-       audioContextRef.current.close();
-     }
-   };
+  const stopVisualizer = () => {
+    if (audioContextRef.current) {
+      try {
+        audioContextRef.current.close();
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -138,6 +141,12 @@ function DescriptionSection({onGenerate}) {
   return (
     <div>
       <Typography variant="h5">Capture Narratives</Typography>
+      <Typography variant="body1" style={{marginBottom: 16}}>
+        Provide a detailed description of the festival/concert/event. You can
+        also record audio or upload images and videos to enhance your narrative.
+        Make sure to give a comprehensive and vivid description to generate
+        detailed promotional materials.
+      </Typography>
       <div className={classes.visualizer}>
         {isRecording && <AudioVisualizer analyser={analyser} />}
       </div>
@@ -225,7 +234,7 @@ function DescriptionSection({onGenerate}) {
         color="primary"
         className={classes.button}
         onClick={handleGenerateClick}
-        disabled={mediaFiles.length === 0}
+        disabled={mediaFiles.length === 0 && description.length === 0}
       >
         Generate
       </Button>
