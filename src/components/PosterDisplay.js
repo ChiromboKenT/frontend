@@ -1,13 +1,9 @@
 import React from "react";
-import DOMPurify from "dompurify";
 
-const PosterDisplay = ({posterHtml}) => {
-  // Sanitize the HTML content
-  const sanitizedHtml = DOMPurify.sanitize(posterHtml);
-
+const PosterDisplay = ({ posterHtml }) => {
   return (
     <div
-      dangerouslySetInnerHTML={{__html: sanitizedHtml}}
+      dangerouslySetInnerHTML={{ __html: posterHtml }}
       style={{
         width: "100%",
         height: "100%",
