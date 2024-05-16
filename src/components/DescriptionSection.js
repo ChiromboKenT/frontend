@@ -7,6 +7,10 @@ import {
   InputAdornment,
   Avatar,
   Grid,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import MicIcon from "@material-ui/icons/Mic";
@@ -63,14 +67,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function DescriptionSection({onGenerate}) {
+function DescriptionSection({onGenerate, startGenerate}) {
   const classes = useStyles();
   const [description, setDescription] = useState("");
   const audioContextRef = useRef(null);
-
   const [analyser, setAnalyser] = useState(null);
   const [mediaFiles, setMediaFiles] = useState([]);
   const [isRecording, setIsRecording] = useState(false);
+  const [srcLang, setSrcLang] = useState("en");
+  const [destLang, setDestLang] = useState("en");
 
   useEffect(() => {
     if (isRecording) {
@@ -112,18 +117,38 @@ function DescriptionSection({onGenerate}) {
     setMediaFiles(mediaFiles.filter((_, i) => i !== index));
   };
 
-  const handleGenerateClick = () => {
+  const handleGenerateClick = async () => {
+    startGenerate();
     const audioFile = mediaFiles.find(
       (file) => file.type && file.type.startsWith("audio")
     );
-    const videoFile = mediaFiles.find(
-      (file) => file.type && file.type.startsWith("video")
-    );
-    onGenerate(
-      description,
-      audioFile ? URL.createObjectURL(audioFile) : null,
-      videoFile ? URL.createObjectURL(videoFile) : null
-    );
+    const formData = new FormData();
+    formData.append("text", description);
+    formData.append("src_lang", srcLang);
+    formData.append("dest_lang", destLang);
+    if (audioFile) {
+      formData.append("audio", audioFile);
+    }
+
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/generate-full-poster`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      const {poster_html, social} = await response.json();
+      const {facebook, twitter, instagram} = social;
+      onGenerate({
+        html: poster_html,
+        facebook,
+        twitter,
+        instagram,
+      });
+    } catch (error) {
+      console.error("Error generating poster:", error);
+    }
   };
 
   const handleRecordClick = () => {
@@ -159,6 +184,34 @@ function DescriptionSection({onGenerate}) {
         visualSetting={undefined}
         noiseSuppression={true}
       />
+      <FormControl fullWidth margin="normal" variant="outlined">
+        <InputLabel id="source-lang-label">Source Language</InputLabel>
+        <Select
+          labelId="source-lang-label"
+          value={srcLang}
+          onChange={(e) => setSrcLang(e.target.value)}
+          label="Source Language"
+        >
+          <MenuItem value="en">English</MenuItem>
+          <MenuItem value="yo">Yoruba</MenuItem>
+          <MenuItem value="fon">Fon</MenuItem>
+          <MenuItem value="fr">French</MenuItem>
+        </Select>
+      </FormControl>
+      <FormControl fullWidth margin="normal" variant="outlined">
+        <InputLabel id="dest-lang-label">Destination Language</InputLabel>
+        <Select
+          labelId="dest-lang-label"
+          value={destLang}
+          onChange={(e) => setDestLang(e.target.value)}
+          label="Destination Language"
+        >
+          <MenuItem value="en">English</MenuItem>
+          <MenuItem value="yo">Yoruba</MenuItem>
+          <MenuItem value="fon">Fon</MenuItem>
+          <MenuItem value="fr">French</MenuItem>
+        </Select>
+      </FormControl>
       <TextField
         label="Add a description"
         fullWidth

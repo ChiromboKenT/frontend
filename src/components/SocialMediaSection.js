@@ -50,13 +50,24 @@ function SocialMediaSection({socialMediaText, isGenerating}) {
         {value === 0 && (
           <Paper className={classes.socialPost}>
             <FacebookIcon className={classes.socialIcon} />
-            <Typography variant="body1">{socialMediaText.facebook}</Typography>
+            <Typography variant="h4">
+              {socialMediaText.facebook?.title}
+            </Typography>
+            <Typography variant="body1">
+              {socialMediaText.facebook?.description}
+            </Typography>
             <Button
               variant="contained"
               color="primary"
               startIcon={<CopyIcon />}
               className={classes.button}
-              onClick={() => handleCopy(socialMediaText.facebook)}
+              onClick={() =>
+                handleCopy(
+                  socialMediaText.facebook?.title +
+                    " " +
+                    socialMediaText.facebook?.description
+                )
+              }
             >
               Copy
             </Button>
@@ -65,13 +76,18 @@ function SocialMediaSection({socialMediaText, isGenerating}) {
         {value === 1 && (
           <Paper className={classes.socialPost}>
             <TwitterIcon className={classes.socialIcon} />
-            <Typography variant="body1">{socialMediaText.twitter}</Typography>
+            <Typography variant="h4">
+              {socialMediaText.twitter?.title}
+            </Typography>
+            <Typography variant="body1">
+              {socialMediaText.twitter?.description}
+            </Typography>
             <Button
               variant="contained"
               color="primary"
               startIcon={<CopyIcon />}
               className={classes.button}
-              onClick={() => handleCopy(socialMediaText.twitter)}
+              onClick={() => handleCopy(socialMediaText.twitter?.title)}
             >
               Copy
             </Button>
@@ -79,13 +95,18 @@ function SocialMediaSection({socialMediaText, isGenerating}) {
         )}
         {value === 2 && (
           <Paper className={classes.socialPost}>
-            <Typography variant="body1">{socialMediaText.generic}</Typography>
+            <Typography variant="h4">
+              {socialMediaText.instagram?.title}
+            </Typography>
+            <Typography variant="body1">
+              {socialMediaText.facebook?.description}
+            </Typography>
             <Button
               variant="contained"
               color="primary"
               startIcon={<CopyIcon />}
               className={classes.button}
-              onClick={() => handleCopy(socialMediaText.generic)}
+              onClick={() => handleCopy(socialMediaText.instagram?.title)}
             >
               Copy
             </Button>

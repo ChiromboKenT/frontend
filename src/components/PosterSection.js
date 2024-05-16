@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState} from "react";
 import {
   Typography,
   Button,
@@ -8,6 +8,7 @@ import {
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import RefreshIcon from "@material-ui/icons/Refresh";
+import PosterDisplay from './PosterDisplay';
 
 const useStyles = makeStyles((theme) => ({
   media: {
@@ -46,11 +47,7 @@ function PosterSection({poster, setPoster, isGenerating}) {
         </Typography>
       ) : (
         <Card className={classes.card}>
-          <CardMedia
-            className={classes.media}
-            image={poster}
-            title="Generated Poster"
-          />
+          <PosterDisplay posterHtml={poster} />
           <CardActions>
             <Button
               variant="contained"
