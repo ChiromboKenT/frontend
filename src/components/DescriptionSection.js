@@ -138,10 +138,11 @@ function DescriptionSection({onGenerate, startGenerate}) {
           body: formData,
         }
       );
-      const {poster_html, social} = await response.json();
+      const { poster_html, social } = await response.json();
+      const html = await poster_html.text();
       const {facebook, twitter, instagram} = social;
       onGenerate({
-        html: poster_html,
+        html,
         facebook,
         twitter,
         instagram,
