@@ -4,6 +4,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import TwitterIcon from "@material-ui/icons/Twitter";
 import CopyIcon from "@material-ui/icons/FileCopy";
+import { Instagram } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   tabContent: {
@@ -23,6 +24,14 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     marginLeft: "auto",
+  },
+  socialContainer: {
+    display: "flex",
+    flexDirection: "column",
+    flexGrow: 1,
+    justifyContent: "center",
+    gap: theme.spacing(1),
+    padding: theme.spacing(1),
   },
 }));
 
@@ -50,12 +59,14 @@ function SocialMediaSection({socialMediaText, isGenerating}) {
         {value === 0 && (
           <Paper className={classes.socialPost}>
             <FacebookIcon className={classes.socialIcon} />
-            <Typography variant="h4">
-              {socialMediaText.facebook?.title}
-            </Typography>
-            <Typography variant="body1">
-              {socialMediaText.facebook?.description}
-            </Typography>
+            <div className={classes.socialContainer}>
+              <Typography variant="h4">
+                {socialMediaText.facebook?.title}
+              </Typography>
+              <Typography variant="body1">
+                {socialMediaText.facebook?.description}
+              </Typography>
+            </div>
             <Button
               variant="contained"
               color="primary"
@@ -76,12 +87,16 @@ function SocialMediaSection({socialMediaText, isGenerating}) {
         {value === 1 && (
           <Paper className={classes.socialPost}>
             <TwitterIcon className={classes.socialIcon} />
+            <div className={classes.socialContainer}>
+
+
             <Typography variant="h4">
               {socialMediaText.twitter?.title}
             </Typography>
             <Typography variant="body1">
               {socialMediaText.twitter?.description}
             </Typography>
+            </div>
             <Button
               variant="contained"
               color="primary"
@@ -95,12 +110,16 @@ function SocialMediaSection({socialMediaText, isGenerating}) {
         )}
         {value === 2 && (
           <Paper className={classes.socialPost}>
+            <Instagram className={classes.socialIcon} />
+            <div className={classes.socialContainer}>
+
             <Typography variant="h4">
               {socialMediaText.instagram?.title}
             </Typography>
             <Typography variant="body1">
               {socialMediaText.facebook?.description}
             </Typography>
+            </div>
             <Button
               variant="contained"
               color="primary"

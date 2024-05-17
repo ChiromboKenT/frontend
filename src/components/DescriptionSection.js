@@ -152,7 +152,7 @@ function DescriptionSection({onGenerate, startGenerate}) {
 
       const {poster_html, social} = response.data;
       const html = poster_html;
-      const {facebook, twitter, instagram} = social;
+      const { facebook, twitter, instagram } = social;
 
       onGenerate({
         html,
@@ -160,6 +160,7 @@ function DescriptionSection({onGenerate, startGenerate}) {
         twitter,
         instagram,
       });
+      setIsGenerating(false);
     } catch (error) {
       console.error("Error generating poster:", error);
       onGenerate({
