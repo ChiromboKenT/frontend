@@ -70,14 +70,15 @@ function App() {
     const checkBackendConnection = async () => {
       setIsBackendLoading(true);
       try {
-        const response = await fetch(
-          `${process.env.REACT_APP_BACKEND_URL}/health`
-        );
-        if (response.ok) {
-          setIsBackendConnected(true);
-        } else {
-          setIsBackendConnected(false);
-        }
+         const response = await axios.get(
+           `${process.env.REACT_APP_BACKEND_URL}/health`
+         );
+
+         if (response.status === 200) {
+           setIsBackendConnected(true);
+         } else {
+           setIsBackendConnected(false);
+         }
       } catch (error) {
         setIsBackendConnected(false);
       } finally {
