@@ -123,7 +123,7 @@ function App() {
               ? "Checking backend..."
               : isBackendConnected
               ? "Backend Connected"
-              : "Backend Disconnected"}
+              : "Backend Disconnected - Please allow insecure content to load. This is a demo app."}
           </Typography>
         </div>
         <div className={classes.section}>
