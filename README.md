@@ -1,70 +1,118 @@
-# Getting Started with Create React App
+# Gishta Promotions Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is the frontend application for Gishta Promotions, a platform designed to create and generate promotional materials for local festivals, concerts, and events. Users can provide detailed descriptions, record audio, and upload media to generate promotional posters and social media content. The backend handles the content generation, image creation, and translation tasks.
 
-## Available Scripts
+## Link to Backend Repo
+[https://github.com/ChiromboKenT/backend](https://github.com/ChiromboKenT/backend)
 
-In the project directory, you can run:
 
-### `npm start`
+## Project Description
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Gishta Promotions is an AI-driven platform that helps users generate promotional materials for local events. The key features include:
+1. **Audio Transcription and Translation**: Users can record audio descriptions, which are transcribed and translated into English using the backend services.
+2. **Content Generation**: The platform uses Google Vertex AI (Gemini 1.5 Pro) to generate structured promotional content.
+3. **Image Generation**: OpenAI's DALL-E is used to create background images for the promotional posters.
+4. **Poster Rendering**: Generated content and images are used to create a visually appealing HTML-based poster.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Key Technologies Used
 
-### `npm test`
+### Frontend
+- **React**: A JavaScript library for building user interfaces.
+- **Material-UI**: A popular React UI framework for creating responsive and visually appealing components.
+- **React H5 Audio Player**: A React component for playing back audio files.
+- **React-Mic**: A React component for recording audio directly from the browser.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Backend
+- **Flask**: A lightweight WSGI web application framework in Python.
+- **Google Vertex AI (Gemini 1.5 Pro)**: Used for content generation.
+- **OpenAI DALL-E**: Used for generating background images.
+- **Google Cloud Translation**: For translating text between different languages.
+- **Transformers (Hugging Face)**: For automatic speech recognition (ASR) to transcribe audio.
+- **Pydub**: For audio processing.
+- **FFmpeg**: For handling audio conversions and manipulations.
+- **imgkit**: For converting HTML to images.
 
-### `npm run build`
+## Running the Application
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Backend
+1. **Clone the Backend Repository**:
+    ```bash
+    git clone https://github.com/ChiromboKenT/backend
+    cd backend
+    ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+2. **Create a Virtual Environment and Install Dependencies**:
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # On Windows: venv\Scripts\activate
+    pip install -r requirements.txt
+    ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+3. **Set Up Environment Variables**:
+    Create a `.env` file in the backend directory and add the necessary environment variables.
+    ```plaintext
+    GOOGLE_APPLICATION_CREDENTIALS=<path-to-google-credentials-json>
+    OPENAI_API_KEY=<your-openai-api-key>
+    ```
 
-### `npm run eject`
+4. **Run the Backend Server**:
+    ```bash
+    flask run
+    ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Frontend
+1. **Clone the Frontend Repository**:
+    ```bash
+    git clone https://github.com/ChiromboKenT/frontend
+    cd frontend
+    ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+2. **Install Dependencies**:
+    ```bash
+    npm install
+    ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+3. **Create a `.env` File**:
+    ```plaintext
+    REACT_APP_BACKEND_URL=http://localhost:5000  # Adjust this based on your backend server address
+    ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+4. **Run the Frontend Development Server**:
+    ```bash
+    npm start
+    ```
 
 ### Deployment
+The frontend is deployed on Vercel. You can access the live demo at:
+[https://gishta-promo-frontend.vercel.app/](https://gishta-promo-frontend.vercel.app/)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Project Structure
+```plaintext
+frontend/
+├── public/
+│   ├── index.html
+│   └── ...
+├── src/
+│   ├── components/
+│   │   ├── DescriptionSection.js
+│   │   ├── PosterSection.js
+│   │   ├── SocialMediaSection.js
+│   │   └── ...
+│   ├── App.js
+│   ├── index.js
+│   ├── theme.js
+│   └── ...
+├── .env
+├── package.json
+└── ...
+```
 
-### `npm run build` fails to minify
+## Contributing
+Feel free to open issues or submit pull requests with improvements or bug fixes.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## License
+This project is licensed under the MIT License.
+
+---
+
+For more information, visit the project repository or contact the project maintainers.

@@ -158,6 +158,12 @@ function DescriptionSection({onGenerate, startGenerate}) {
       setIsGenerating(false);
     } catch (error) {
       console.error("Error generating poster:", error);
+      onGenerate({
+        html : null,
+        facebook : null,
+        twitter : null,
+        instagram : null,
+      });
       setIsGenerating(false);
     }
   };
