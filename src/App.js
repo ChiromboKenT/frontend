@@ -15,6 +15,7 @@ import theme from "./theme";
 import DescriptionSection from "./components/DescriptionSection";
 import PosterSection from "./components/PosterSection";
 import SocialMediaSection from "./components/SocialMediaSection";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
