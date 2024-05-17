@@ -141,7 +141,7 @@ function DescriptionSection({onGenerate, startGenerate}) {
 
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/api/generate-full-poster`,
+        `${process.env.REACT_APP_BACKEND_URL}/generate-full-poster`,
         formData,
         {
           headers: {
