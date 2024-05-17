@@ -139,23 +139,26 @@ function DescriptionSection({onGenerate, startGenerate}) {
     }
 
     try {
-      const response = await fetch(
+      const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/generate-full-poster`,
+        formData,
         {
-          method: "POST",
-          body: formData,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
-      const {poster_html, social} = await response.json();
+
+      const {poster_html, social} = response.data;
       const html = poster_html;
       const {facebook, twitter, instagram} = social;
+
       onGenerate({
         html,
         facebook,
         twitter,
         instagram,
       });
-      setIsGenerating(false);
     } catch (error) {
       console.error("Error generating poster:", error);
       onGenerate({
